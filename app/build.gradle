@@ -5,7 +5,7 @@ android {
     signingConfigs {
         buglytest {
             keyPassword 'yixincapital'
-            storeFile file('/Users/zhanglin03/Documents/yixin/aries_android_dev_icbc/ectapp.jks')
+            storeFile file('/Users/zhanglin/Documents/yixin/aries_android_master_prd/ectapp.jks')
             storePassword 'yixincapital'
             keyAlias 'ectapp'
         }

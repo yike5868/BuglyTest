@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.WindowManager;
 
+import com.tencent.bugly.beta.Beta;
 import com.zlin.buglytest.MainActivity;
 
 import org.json.JSONException;
@@ -86,11 +87,7 @@ public class MyReceiver extends BroadcastReceiver {
 		builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
-				Intent intent1 = new Intent(context, MainActivity.class);
-
-				//在广播接收器中启动活动，一定要给Intent加入FLAG_ACTIVITY_NEW_TASK标志
-				intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-				context.startActivity(intent1);
+				Beta.checkUpgrade();
 			}
 		});
 

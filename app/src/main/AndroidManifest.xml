@@ -82,6 +82,8 @@
             android:exported="false">
         </activity>
 
+        <activity android:name=".NewActivity" />
+
         <!-- Required SDK核心功能-->
         <activity
             android:name="cn.jpush.android.ui.PushActivity"

@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.btn_check:
-                Beta.checkUpgrade();
+                Beta.checkUpgrade(true,true);
                 break;
             case R.id.btn_down:
 //                Beta.startDownload();
@@ -63,11 +63,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 Beta.applyDownloadedPatch();
                 break;
             case R.id.btn_restart:
-
+                final Intent intent = getPackageManager().getLaunchIntentForPackage(getPackageName());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(intent);
+                android.os.Process.killProcess(android.os.Process.myPid());
                 break;
             case R.id.btn_new:
-                Intent intent = new Intent(MainActivity.this,NewActivity.class);
-                startActivity(intent);
+                Intent intent2 = new Intent(MainActivity.this,NewActivity.class);
+                startActivity(intent2);
                 break;
             case R.id.btn_math:
                 showUpdate();

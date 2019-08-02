@@ -8,12 +8,14 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.support.multidex.MultiDex;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.tencent.bugly.Bugly;
 import com.tencent.bugly.beta.Beta;
 import com.tencent.bugly.beta.interfaces.BetaPatchListener;
+import com.tencent.bugly.beta.upgrade.UpgradeStateListener;
 import com.tencent.tinker.entry.DefaultApplicationLike;
 
 import java.util.Locale;
@@ -39,7 +41,7 @@ public class SampleApplicationLike extends DefaultApplicationLike {
         super.onCreate();
         // 这里实现SDK初始化，appId替换成你的在Bugly平台申请的appId
         // 调试时，将第三个参数改为true
-        Bugly.init(getApplication(), "aa86c27e12", true);
+        Bugly.init(getApplication(), "aa86c27e12", false);
     }
 
 
@@ -56,46 +58,83 @@ public class SampleApplicationLike extends DefaultApplicationLike {
         Beta.canAutoDownloadPatch = true;//设置是否允许自动下载补丁
         Beta.canAutoPatch = true;//设置是否允许自动合成补丁
         Beta.canNotifyUserRestart = false;//设置是否显示弹窗提示用户重启
+        Beta.upgradeStateListener = new UpgradeStateListener() {
+            @Override
+            public void onUpgradeFailed(boolean b) {
+
+            }
+
+            @Override
+            public void onUpgradeSuccess(boolean b) {
+
+            }
+
+            @Override
+            public void onUpgradeNoVersion(boolean b) {
+
+            }
+
+            @Override
+            public void onUpgrading(boolean b) {
+
+            }
+
+            @Override
+            public void onDownloadCompleted(boolean b) {
+
+            }
+        };
         Beta.betaPatchListener = new BetaPatchListener() {
             @Override
             public void onPatchReceived(String patchFile) {
-                Toast.makeText(getApplication(), "补丁下载地址" + patchFile, Toast.LENGTH_SHORT).show();
+                Log.e("bugly","补丁下载地址:"+patchFile);
+//                Toast.makeText(getApplication(), "补丁下载地址" + patchFile, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDownloadReceived(long savedLength, long totalLength) {
-                Toast.makeText(getApplication(),
-                        String.format(Locale.getDefault(), "%s %d%%",
+//                Toast.makeText(getApplication(),
+//                        String.format(Locale.getDefault(), "%s %d%%",
+//                                Beta.strNotificationDownloading,
+//                                (int) (totalLength == 0 ? 0 : savedLength * 100 / totalLength)),
+//                        Toast.LENGTH_SHORT).show();
+                Log.e("bugly",String.format(Locale.getDefault(), "%s %d%%",
                                 Beta.strNotificationDownloading,
-                                (int) (totalLength == 0 ? 0 : savedLength * 100 / totalLength)),
-                        Toast.LENGTH_SHORT).show();
+                                (int) (totalLength == 0 ? 0 : savedLength * 100 / totalLength)));
             }
 
             @Override
             public void onDownloadSuccess(String msg) {
-                Toast.makeText(getApplication(), "补丁下载成功", Toast.LENGTH_SHORT).show();
+                Log.e("bugly","补丁下载成功");
+//                Toast.makeText(getApplication(), "补丁下载成功", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onDownloadFailure(String msg) {
-                Toast.makeText(getApplication(), "补丁下载失败", Toast.LENGTH_SHORT).show();
+                Log.e("bugly","补丁下载失败");
+//                Toast.makeText(getApplication(), "补丁下载失败", Toast.LENGTH_SHORT).show();
 
             }
 
             @Override
             public void onApplySuccess(String msg) {
-                Toast.makeText(getApplication(), "补丁应用成功", Toast.LENGTH_SHORT).show();
-                showUpdate();
+                Log.e("bugly","补丁应用成功");
+//                Toast.makeText(getApplication(), "补丁应用成功", Toast.LENGTH_SHORT).show();
+//                showUpdate();
+                final Intent intent = context.getPackageManager().getLaunchIntentForPackage(context.getPackageName());
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                context.startActivity(intent);
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
 
             @Override
             public void onApplyFailure(String msg) {
-                Toast.makeText(getApplication(), "补丁应用失败", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplication(), "补丁应用失败", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onPatchRollback() {
-                Toast.makeText(getApplication(), "补丁回滚", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getApplication(), "补丁回滚", Toast.LENGTH_SHORT).show();
             }
         };
 

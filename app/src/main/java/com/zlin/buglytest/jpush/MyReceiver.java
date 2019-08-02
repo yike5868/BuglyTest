@@ -51,8 +51,8 @@ public class MyReceiver extends BroadcastReceiver {
 				int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
 				Logger.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
 
-				showUpdate();
-
+//				showUpdate();
+                Beta.checkUpgrade(true,true);
 
 			} else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
 				Logger.d(TAG, "[MyReceiver] 用户点击打开了通知");
